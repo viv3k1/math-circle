@@ -1,31 +1,11 @@
 version: 2.1
 jobs:
   build:
-    working_directory: ~/public
     docker:
-      - image: circleci/node:7.10
+      # specify the version you desire here
+      - image: circleci/node:8.9.0
+
     steps:
       - checkout
-      -run: 
-        name: update-npm
-        command: "sudo npm install -g npm@latest"
-      -restore_cache:
-        key: dependency-cache-{{ checksum "package.json"}}
-      -run: 
-        name: install-npm-wee
-        command: npm install
-      -save_cache:
-         key: dependency-cache-{{ checksum "package.json"}}
-         paths:
-            - ./node_modules
-      -run:
-        name: test
-        command: npm test
-      - store_artifacts:
-          path: test_results.xml   
-          prefix: tests
-      - store_artifacts:
-          path: coverage
-          prefix: coverage
-      - store_test_results:
-          path: test_results.xml            
+      - run: npm install
+      - run: npm test
